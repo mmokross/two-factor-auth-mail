@@ -24,10 +24,10 @@ To work for everyone, the following has to be done:
 E.g. in Ubuntu bash: 
 
 
-    cd <dir>
-    touch twofactorSecrets
-    chgrp www-data twofactorSecrets;  # ubuntu specific, group might also be apache2
-    chmod g+w twofactorSecrets;
+        cd <dir>
+        touch twofactorSecrets
+        chgrp www-data twofactorSecrets;  # ubuntu specific, group might also be apache2
+        chmod g+w twofactorSecrets;
 
 3. Edit the Apache \<VirtualHost> config OR \<Directory> config OR add a .htaccess file to the directory to secure
 
@@ -52,9 +52,9 @@ Hint: In Ubuntu phpmyadmin default installations in /usr/share/phpmyadmin, the \
         
 5. Define a Rewite Map in Apache - this can be done globally or in your VirtualHost or Directory directive where you madde the definitions above. This can **not** be done in .htaccess . Change the path to apacheCheckTwoFactor.php.
         
-       # enable 2-factor-auth
-       RewriteEngine On
-       RewriteMap TwoFacAuth "prg:/set/path/to/file/apacheCheckTwoFactor.php"
+        # enable 2-factor-auth
+        RewriteEngine On
+        RewriteMap TwoFacAuth "prg:/set/path/to/file/apacheCheckTwoFactor.php"
 
 6. Replace the path /usr/share/phpmyadmin/ by the path to secure (where the file "twofactorSecrets" is stored)
 
