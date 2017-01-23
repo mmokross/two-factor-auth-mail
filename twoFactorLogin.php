@@ -42,9 +42,9 @@ if (!$givenToken && $sendMail) {
         $mailObjbect->addTo($sendMail);
         $mailObjbect->setSubject("Login-Token fuer ".$_SERVER["SSL_TLS_SNI"]);
         $mailObjbect->setBodyText("Token: $token \n\n(2 Minuten gueltig)");
-        $mailObjbect->setFrom("llp@charite.de");
-        $smtpServer = "mail-out.charite.de";
-        $emailLocalHostName = "llp.charite.de";
+        $mailObjbect->setFrom("from@mydomain.org");
+        $smtpServer = "smtp.mydomain.org";
+        $emailLocalHostName = "mydomin.org";
         $transport = new \Zend_Mail_Transport_Smtp($smtpServer, array("name" => $emailLocalHostName));
         $mailObjbect->send($transport);
 

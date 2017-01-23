@@ -8,7 +8,7 @@ while (!feof(STDIN)) {
     $line = urldecode(rtrim(fgets(STDIN), "\n"));
     $mail = preg_replace('/^.*twofactor-cookie=(.*)\-.*$/', '$1', $line);
     $mail = explode("-", $mail)[0];
-    $cookieSecret = preg_replace('/^.*llp-2factor-cookie=[^\-]*\-(.*);/', '$1', $line);
+    $cookieSecret = preg_replace('/^.*twofactor-cookie=[^\-]*\-(.*);/', '$1', $line);
     $cookieSecret = explode(";", $cookieSecret)[0];
     $secretFile = preg_replace('/^.*\;([^\;]*)$/', '$1', $line);
 
