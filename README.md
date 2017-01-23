@@ -33,33 +33,44 @@ E.g. in Ubuntu bash:
 
 Hint: In Ubuntu phpmyadmin default installations in /usr/share/phpmyadmin, the \<Directory> directive in  /etc/apache2/conf-available/phpmyadmin.conf has to bes used.
 
-4. Add the following lines to the file found in 3.:
+4. Add the following lines to the file found in 3. and set the path in RewriteConde:
 
         # TWO-FACTOR-AUTH
         RewriteEngine on
         RewriteCond ${TwoFacAuth:%{HTTP_COOKIE};
             /usr/share/phpmyadmin/twofactorSecrets} !^OK.*
-        RewriteCond %{HTTP_COOKIE} phpMyAdmin=(.*)
         RewriteRule ^(.*)$ twoFactorLogin.php [L,QSA]
         
         ## Debug Rule: (replace rule above):
         ## RewriteRule ^(.*)$ twoFactorLogin.php?a=${TwoFacAuth:%{HTTP_COOKIE};/usr/share/phpmyadmin/twofactorSecrets}} [L,QSA]
+        
+5. <b>Only</b> for phpmyadmin:
 
-5. Replace the path /usr/share/phpmyadmin/ by the path to secure (where the file "twofactorSecrets" is stored)
+    Add a second RewriteCond directly below the first one. This will ensure the two-factor-cookie will not be overridden by phpmyadmin:
+     
+        RewriteCond %{HTTP_COOKIE} phpMyAdmin=(.*)
+        
+5. Define a Rewite Map in Apache - this can be done globally or in your VirtualHost or Directory directive where you madde the definitions above. This can **not** be done in .htaccess . Change the path to apacheCheckTwoFactor.php.
+        
+       # enable 2-factor-auth
+       RewriteEngine On
+       RewriteMap TwoFacAuth "prg:/set/path/to/file/apacheCheckTwoFactor.php"
 
-6. Relaod Apache (not necessary when using .htaccess)
+6. Replace the path /usr/share/phpmyadmin/ by the path to secure (where the file "twofactorSecrets" is stored)
+
+7. Relaod Apache (not necessary when using .htaccess)
         
         systemctl reload apache2
 
 
 ### Debugging:
 
-1. Change the last the Apache RewriteRule to the commented rule below
+1. Change the last Apache RewriteRule to the commented rule below
 2. Add a line 
 
         print_r($_GET);
-    below the <?php in the file apacheCheckTwoFactor.php
+    below the <?php in the file twoFactorLogin.php
     
-Now, when the authenitication fails, the error messages of
+Now, when the authenitication fails, the error messages of apacheCheckTwoFactor.php are displayed in the web interface.
 
 # Help for improvement is welcome!
