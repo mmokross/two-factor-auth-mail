@@ -24,14 +24,14 @@ To work for everyone, the following has to be done:
 E.g. in Ubuntu bash: 
 
 
-        cd <dir>
+        cd /var/www/my/dir/to/secure
         touch twofactorSecrets
         chgrp www-data twofactorSecrets;  # ubuntu specific, group might also be apache2
         chmod g+w twofactorSecrets;
 
 3. Edit the Apache \<VirtualHost> config OR \<Directory> config OR add a .htaccess file to the directory to secure
 
-Hint: In Ubuntu phpmyadmin default installations in /usr/share/phpmyadmin, the \<Directory> directive in  /etc/apache2/conf-available/phpmyadmin.conf has to bes used.
+ Hint: In Ubuntu phpmyadmin default installations in /usr/share/phpmyadmin, the \<Directory> directive in  /etc/apache2/conf-available/phpmyadmin.conf has to bes used.
 
 4. Add the following lines to the file found in 3. and set the path in RewriteConde:
 
@@ -50,15 +50,15 @@ Hint: In Ubuntu phpmyadmin default installations in /usr/share/phpmyadmin, the \
      
         RewriteCond %{HTTP_COOKIE} phpMyAdmin=(.*)
         
-5. Define a Rewite Map in Apache - this can be done globally or in your VirtualHost or Directory directive where you madde the definitions above. This can **not** be done in .htaccess . Change the path to apacheCheckTwoFactor.php.
+6. Define a Rewite Map in Apache - this can be done globally or in your VirtualHost or Directory directive where you madde the definitions above. This can **not** be done in .htaccess . Change the path to apacheCheckTwoFactor.php.
         
         # enable 2-factor-auth
         RewriteEngine On
         RewriteMap TwoFacAuth "prg:/set/path/to/file/apacheCheckTwoFactor.php"
 
-6. Replace the path /usr/share/phpmyadmin/ by the path to secure (where the file "twofactorSecrets" is stored)
+7. Replace the path /usr/share/phpmyadmin/ by the path to secure (where the file "twofactorSecrets" is stored)
 
-7. Relaod Apache (not necessary when using .htaccess)
+8. Relaod Apache (not necessary when using .htaccess)
         
         systemctl reload apache2
 
