@@ -8,15 +8,15 @@ while (!feof(STDIN)) {
     $line = urldecode(rtrim(fgets(STDIN), "\n"));
     $mail = preg_replace('/^.*twofactor-cookie=(.*)\-.*$/', '$1', $line);
     $mail = explode("-", $mail)[0];
-    $cookieSecret = preg_replace('/^.*twofactor-cookie=[^\-]*\-(.*);/', '$1', $line);
+    $cookieSecret = preg_replace('/^.*twofactor-cookie=[^\-]*\-(.*;)/', '$1', $line);
     $cookieSecret = explode(";", $cookieSecret)[0];
-    $secretFile = preg_replace('/^.*\;([^\;]*)$/', '$1', $line);
+    $SECRETS_FILE = preg_replace('/^.*\;([^\;]*)$/', '$1', $line);
 
     $secrets = [];
-    if (file_exists($secretFile)) {
-        $secrets = unserialize(file_get_contents($secretFile));
+    if (FALSE !== file_get_contents($SECRETS_FILE)) {
+        $secrets = unserialize(file_get_contents($SECRETS_FILE));
     } else {
-        fputs(STDOUT,"FAIL:SECRET-FILE-NOT-EXISTS:" . $secretFile . "\n");
+        fputs(STDOUT,"FAIL:SECRET-FILE-NOT-EXISTS:" . $SECRETS_FILE . "\n");
         continue;
     }
 

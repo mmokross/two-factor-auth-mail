@@ -1,0 +1,16 @@
+RewriteEngine on
+
+RewriteCond ${TwoFacAuth:%{HTTP_COOKIE};/var/www/html/b/twoFactorSecrets} !^OK.*$
+RewriteRule ^(.*)$ twoFactorLogin.php [L,QSA]
+
+<Files twoFactorSecrets>
+    order allow,deny
+    deny from all
+</Files>
+
+
+# ------------------------------
+# for DEBUG purpose, one can replace the above line "RewriteRule" with the following one.
+# - when accessing the login page in the browser with "?debug=1", some information is shown why the authentication fails.
+
+# RewriteRule ^(.*)$ twoFactorLogin.php?a=%{HTTP_COOKIE}&b=${TwoFacAuth:%{HTTP_COOKIE};/var/www/html/b/twoFactorSecrets} [L,QSA]

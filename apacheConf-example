@@ -1,0 +1,12 @@
+# the two-factor-auth scipt can be set in apache globally or in a VirtualHost (like below)
+# it does NOT work inside .htaccess, because it is started already when apache loads its configuration
+# if set globally, it does not matter where the script is located in the filesyystem - the same script and
+# definition can work for many sites
+
+<VirtualHost *:443>
+
+    # enable 2-factor-auth
+    RewriteEngine On
+    RewriteMap TwoFacAuth "prg:/var/www/html/b/apacheCheckTwoFactor.php"
+
+</VirtualHost>

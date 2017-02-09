@@ -1,0 +1,26 @@
+; SMTP settings
+smtp_host=
+;smtp_port=
+;smtp_username=
+;smpt_password=
+;smtp_local_domain=
+
+; an array with all mail addressess allowed to authenticate
+allowed_mail_addresses[] = ""
+
+; the from mail address
+mail_from=""
+; the address / name to show additionally to the mail address in the FROM field
+mail_from_text=""
+; a message two show on the two-fachtor login site
+server_title_shown="Auth Token for my site"
+
+; time the login in the cookie is valid; after that the two-factor-auth page appears again (checked server-side)
+login_valid_hours = 10
+; time of the validity of the mail token after the mail is sent
+mailtoken_valid_seconds = 120
+
+; the file name where the secrets are saved. That has to be readable and writeable by apache
+; (e.g. by creating the file and setting the right permissions only to that file)
+; this file must also be given in the .htaccess file as additional parameter to {TwoFacAuth:...} in the RewriteCond
+secrets_file_name = "/var/www/html/mysite/twoFactorSecrets"
