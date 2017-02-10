@@ -28,9 +28,9 @@ Work, that could be done:
         php composer.phar require mdi22/two-factor-auth-mail
 
 **3.** copy all files (or at least the following) to the directory that has to be secured:
- * vendor/mdi22/twoFactorLogin.php
- * vendor/mdi22/apacheCheckTwoFactor.php
- * vendor/mdi22/twoFactorConfig.ini.dist
+ * vendor/mdi22/two-factor-auth-mail/twoFactorLogin.php
+ * vendor/mdi22/two-factor-auth-mail/apacheCheckTwoFactor.php
+ * vendor/mdi22/two-factor-auth-mail/twoFactorConfig.ini.dist
  * the *vendor/* directory
  
 The script apacheCheckTwoFactor.php is needed by apache globally and can be copied to a separate place, or just used in its original place, if multiple sites must be secured on the server.
@@ -68,7 +68,7 @@ Add the following lines to the acording file and change the path to the secret f
         ## Debug Rule: (replace rule above):
         ## RewriteRule ^(.*)$ twoFactorLogin.php?a=${TwoFacAuth:%{HTTP_COOKIE};/var/www/html/mysite/twoFactorSecrets}} [L,QSA]
         
-You can also have a look at *htaccess-example* in vendor/mdi22.
+You can also have a look at *htaccess-example* in vendor/mdi22/two-factor-auth-mail/.
         
 **7.** <b>Only</b> for phpmyadmin:
 
@@ -86,7 +86,7 @@ You can also have a look at *htaccess-example* in vendor/mdi22.
         RewriteEngine On
         RewriteMap TwoFacAuth "prg:/my/path/vendor/mdi22/two-factor-auth-mail/apacheCheckTwoFactor.php"
         
-You can also have a look at *apacheConf-example* in vendor/mdi22.
+You can also have a look at *apacheConf-example* in vendor/mdi22/two-factor-auth-mail/.
         
 **9.** Reload Apache
 
