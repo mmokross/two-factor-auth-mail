@@ -2,7 +2,12 @@
   "name": "mdi22/two-factor-auth-mail",
   "description": "Simple PHP script to secure a host/directory delivered with apache site by sending a mail with a token. A cookie is created to access these site which is valid for a defined time. Works also with phpmyadmin.",
   "type": "library",
-  "keywords": ["two-factor","2-factor","mail", "authentication"],
+  "keywords": [
+    "two-factor",
+    "2-factor",
+    "mail",
+    "authentication"
+  ],
   "license": "GPLv3",
   "homepage": "https://github.com/mdi22/two-factor-auth-mail",
   "authors": [
@@ -10,19 +15,8 @@
       "name": "Martin Dittmar"
     }
   ],
-
-
   "require": {
     "php": ">=7.0",
     "swiftmailer/swiftmailer": "^5.4"
-  },
-
-  "scripts": {
-    "post-install-cmd": [
-      "cp vendor/mdi22/two-factor-auth-mail/*.php vendor/mdi22/two-factor-auth-mail/*-example vendor/mdi22/two-factor-auth-mail/*.dist ."
-    ],
-    "post-update-cmd": [
-      "cp vendor/mdi22/two-factor-auth-mail/*.php vendor/mdi22/two-factor-auth-mail/*-example vendor/mdi22/two-factor-auth-mail/*.dist ."
-    ]
   }
 }

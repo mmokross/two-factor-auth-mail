@@ -20,7 +20,7 @@ Work, that could be done:
 
  **1.** install PHP 7.0 or newer
 
- **2.** get composer:
+ **2.** get composer (can be done in the directory to be secured or in another directory):
   
         wget https://getcomposer.org/installer
         php installer
@@ -28,26 +28,31 @@ Work, that could be done:
         php composer.phar require mdi22/two-factor-auth-mail
 
 **3.** copy all files (or at least the following) to the directory that has to be secured:
- * twoFactorLogin.php
- * apacheCheckTwoFactor.php
- * twoFactorConfig.ini.dist
+ * vendor/mdi22/twoFactorLogin.php
+ * vendor/mdi22/apacheCheckTwoFactor.php
+ * vendor/mdi22/twoFactorConfig.ini.dist
  * the *vendor/* directory
  
-The script apacheCheckTwoFactor.php is needed by apache globally and can be copied to a separate place, if multiple sites must be secured on the server.
+The script apacheCheckTwoFactor.php is needed by apache globally and can be copied to a separate place, or just used in its original place, if multiple sites must be secured on the server.
 
-**4.** Create a file like e.g. "twofactorSecrets" in that directory and make sure it can be accessed by apache.
+**4.** Create a secrets file like e.g. "twofactorSecrets" in that directory and make sure it can be accessed by apache.
+
 E.g. in Ubuntu bash: 
 
 
         cd /var/www/my/dir/to/secure
         touch twofactorSecrets
         chgrp www-data twofactorSecrets;  # ubuntu specific, group might also be apache2 etc.
-        chmod g+w twofactorSecrets;
+        chmod g+rw twofactorSecrets;
 
-**5.** copy twoFactorConfig.ini.dist to twoFactorConfig and set your configuration accordingly. Lines starting with ";" are comments
+**5.** Move twoFactorConfig.ini.dist to twoFactorConfig and set your configuration accordingly.
+
+ Set the absolute path to the secrets file you created at the bottom.
+ 
+ Lines starting with ";" are comments. 
 
 
-**6.** Add a *.htaccess* file to the directory OR edit the Apache \<VirtualHost> config OR \<Directory> config
+**6.** Add a *.htaccess* file to the directory **OR** edit the Apache \<VirtualHost> config **OR** \<Directory> config
 
  Hint: In Ubuntu phpmyadmin default installations in /usr/share/phpmyadmin, the \<Directory> directive in  /etc/apache2/conf-available/phpmyadmin.conf has to be used.
 
@@ -63,7 +68,7 @@ Add the following lines to the acording file and change the path to the secret f
         ## Debug Rule: (replace rule above):
         ## RewriteRule ^(.*)$ twoFactorLogin.php?a=${TwoFacAuth:%{HTTP_COOKIE};/var/www/html/mysite/twoFactorSecrets}} [L,QSA]
         
-You can also have a look at *htaccess-example*.
+You can also have a look at *htaccess-example* in vendor/mdi22.
         
 **7.** <b>Only</b> for phpmyadmin:
 
@@ -79,9 +84,9 @@ You can also have a look at *htaccess-example*.
         
         # enable 2-factor-auth
         RewriteEngine On
-        RewriteMap TwoFacAuth "prg:/my/path/to/file/apacheCheckTwoFactor.php"
+        RewriteMap TwoFacAuth "prg:/my/path/vendor/mdi22/two-factor-auth-mail/apacheCheckTwoFactor.php"
         
-You can also have a look at *apacheConf-example*.
+You can also have a look at *apacheConf-example* in vendor/mdi22.
         
 **9.** Reload Apache
 
