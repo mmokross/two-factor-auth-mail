@@ -7,6 +7,6 @@
 
     # enable 2-factor-auth
     RewriteEngine On
-    RewriteMap TwoFacAuth "prg:/var/www/html/b/apacheCheckTwoFactor.php"
+    RewriteMap TwoFacAuth "prg:/var/www/html/mysite/apacheCheckTwoFactor.php"
 
 </VirtualHost>

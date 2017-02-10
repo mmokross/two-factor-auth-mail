@@ -18,70 +18,87 @@ Work, that could be done:
 # Installation
 (For Linux / Ubuntu, other platforms might differ)
 
- 1. install PHP 7.0 or newer
+ **1.** install PHP 7.0 or newer
 
-* using composer:
- 0. get composer:
- 
+ **2.** get composer:
+  
         wget https://getcomposer.org/installer
         php installer
-        php composer.phar require 
+        php composer.phar require mdi22/two-factor-auth-mail
 
+**3.** copy all files (or at least the following) to the directory that has to be secured:
+ * twoFactorLogin.php
+ * apacheCheckTwoFactor.php
+ * twoFactorConfig.ini.dist
+ * the *vendor/* directory
  
+The script apacheCheckTwoFactor.php is needed by apache globally and can be copied to a separate place, if multiple sites must be secured on the server.
 
-1. copy the 2 scripts twoFactorLogin.php and apacheCheckTwoFactor.php to the directory that has to be secured on the server (or copy it somewhere and create a symbolic link of twoFactorLogin.php in the directory to secure). The script apacheCheckTwoFactor.php must be set executable.
-
-2. Create a file "twofactorSecrets" in that directory and make sure it can be accessedd by apache.
+**4.** Create a file like e.g. "twofactorSecrets" in that directory and make sure it can be accessed by apache.
 E.g. in Ubuntu bash: 
 
 
         cd /var/www/my/dir/to/secure
         touch twofactorSecrets
-        chgrp www-data twofactorSecrets;  # ubuntu specific, group might also be apache2
+        chgrp www-data twofactorSecrets;  # ubuntu specific, group might also be apache2 etc.
         chmod g+w twofactorSecrets;
 
-3. Edit the Apache \<VirtualHost> config OR \<Directory> config OR add a .htaccess file to the directory to secure
+**5.** copy twoFactorConfig.ini.dist to twoFactorConfig and set your configuration accordingly. Lines starting with ";" are comments
 
- Hint: In Ubuntu phpmyadmin default installations in /usr/share/phpmyadmin, the \<Directory> directive in  /etc/apache2/conf-available/phpmyadmin.conf has to bes used.
 
-4. Add the following lines to the file found in 3. and set the path in RewriteConde:
+**6.** Add a *.htaccess* file to the directory OR edit the Apache \<VirtualHost> config OR \<Directory> config
+
+ Hint: In Ubuntu phpmyadmin default installations in /usr/share/phpmyadmin, the \<Directory> directive in  /etc/apache2/conf-available/phpmyadmin.conf has to be used.
+
+Add the following lines to the acording file and change the path to the secret file in RewriteCond:
+
 
         # TWO-FACTOR-AUTH
         RewriteEngine on
         RewriteCond ${TwoFacAuth:%{HTTP_COOKIE};
-            /usr/share/phpmyadmin/twofactorSecrets} !^OK.*
+            /var/www/html/mysite/twoFactorSecrets} !^OK.*
         RewriteRule ^(.*)$ twoFactorLogin.php [L,QSA]
         
         ## Debug Rule: (replace rule above):
-        ## RewriteRule ^(.*)$ twoFactorLogin.php?a=${TwoFacAuth:%{HTTP_COOKIE};/usr/share/phpmyadmin/twofactorSecrets}} [L,QSA]
+        ## RewriteRule ^(.*)$ twoFactorLogin.php?a=${TwoFacAuth:%{HTTP_COOKIE};/var/www/html/mysite/twoFactorSecrets}} [L,QSA]
         
-5. <b>Only</b> for phpmyadmin:
+You can also have a look at *htaccess-example*.
+        
+**7.** <b>Only</b> for phpmyadmin:
 
-    Add a second RewriteCond directly below the first one. This will ensure the two-factor-cookie will not be overridden by phpmyadmin:
+    Add a second RewriteCond directive directly below the first one. This will ensure the two-factor-cookie will not be overridden by phpmyadmin:
      
         RewriteCond %{HTTP_COOKIE} phpMyAdmin=(.*)
         
-6. Define a Rewite Map in Apache - this can be done globally or in your VirtualHost or Directory directive where you madde the definitions above. This can **not** be done in .htaccess . Change the path to apacheCheckTwoFactor.php.
+    Unfortunately, the phpmyadmin site has to be loaded twice, but that's the only disadvantage of that solution.
+        
+**8.** Define a Rewite Map in Apache - this can be done globally or in your VirtualHost or Directory configuration where you made the definitions above. This can **not** be done in .htaccess!!
+ 
+    Change the path accordingly to your apacheCheckTwoFactor.php.
         
         # enable 2-factor-auth
         RewriteEngine On
-        RewriteMap TwoFacAuth "prg:/set/path/to/file/apacheCheckTwoFactor.php"
+        RewriteMap TwoFacAuth "prg:/my/path/to/file/apacheCheckTwoFactor.php"
+        
+You can also have a look at *apacheConf-example*.
+        
+**9.** Reload Apache
 
-7. Replace the path /usr/share/phpmyadmin/ by the path to secure (where the file "twofactorSecrets" is stored)
-
-8. Relaod Apache (not necessary when using .htaccess)
+e.g.
         
         systemctl reload apache2
+        
+or
+        
+        /etc/init.d/apache2 reload
 
-
+#
 ### Debugging:
 
-1. Change the last Apache RewriteRule to the commented rule below
-2. Add a line 
-
-        print_r($_GET);
-    below the <?php in the file twoFactorLogin.php
+Change the last Apache RewriteRule to the commented rule in 6)
     
-Now, when the authenitication fails, the error messages of apacheCheckTwoFactor.php are displayed in the web interface.
+Now, if you add "*?debug=1*" to your URL in the browser, the error messages of apacheCheckTwoFactor.php are displayed in the web interface if the authenitication fails.
 
-# Help for improvement is welcome!
+
+#
+### Help for improvement is welcome!
