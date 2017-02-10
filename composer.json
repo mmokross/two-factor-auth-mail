@@ -19,10 +19,10 @@
 
   "scripts": {
     "post-install-cmd": [
-      "cp vendor/mdi22/tw"
+      "cp vendor/mdi22/two-factor-auth-mail/*.php vendor/mdi22/two-factor-auth-mail/*-example vendor/mdi22/two-factor-auth-mail/*.dist ."
     ],
     "post-update-cmd": [
-      "bash patchVendor.sh"
+      "cp vendor/mdi22/two-factor-auth-mail/*.php vendor/mdi22/two-factor-auth-mail/*-example vendor/mdi22/two-factor-auth-mail/*.dist ."
     ]
   }
 }
