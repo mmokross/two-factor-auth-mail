@@ -1,22 +1,33 @@
 # two-factor-auth-mail
-Simple PHP script to secure a host/directory delivered with apache site by sending a mail with a token. A cookie is created to access these site which is valid for a defined time. Works also with phpmyadmin.
+Simple PHP script to secure a host/directory/site delivered with apache by sending a mail with a token. A cookie is created to access these site which is valid for a defined time. Works also with phpmyadmin.
 
 The idea is, that it is much over the top to have a two-factor-auth with a smartphone app or SMS, if you just want to secure e.g. phpmyadmin from access of everyone from the internet to a limited list of users with email addresses. 
 
-The two-factor-auth works by sending a mail to pre-defined mail addresses. After the token has been sent with a web-form, a cookie is created in the browser. The server checks if the cookie is not expired on the server side. The expiration time can be define (default: 10 hours).
+The two-factor-auth works by sending an email to one of pre-defined mail addresses. After the token has been sent with a web-form, a cookie is created in the browser. The server checks if the cookie is correct and has not expired on the server side. The expiration time can be defined (default: 10 hours).
 
-On every request the cookie authenticiation is executed. When the authentication is valid, the secured site is shown directly with apache. 
+On every request the cookie authenticiation is executed. When the authentication is valid, the secured site is shown directly with apache. Otherwise, a rewrite to the login script id executed by apache. 
 
-This script works well for me.
-To work for everyone, the following has to be done:
-* Change the code for mail sending so that there is no more dependency on Zend Mailer (or install Zend1)
-* Add configuration interface / ini file instead of using constants
-* Improve design
+This script works well for me using an SMTP server.
+
+Work, that could be done:
+* configuration to work with sendmail or other methods 
 * Translation ?
+* Improve design
 * Refactoring etc...
 
 # Installation
 (For Linux / Ubuntu, other platforms might differ)
+
+ 1. install PHP 7.0 or newer
+
+* using composer:
+ 0. get composer:
+ 
+        wget https://getcomposer.org/installer
+        php installer
+        php composer.phar require 
+
+ 
 
 1. copy the 2 scripts twoFactorLogin.php and apacheCheckTwoFactor.php to the directory that has to be secured on the server (or copy it somewhere and create a symbolic link of twoFactorLogin.php in the directory to secure). The script apacheCheckTwoFactor.php must be set executable.
 
