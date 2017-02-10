@@ -15,5 +15,14 @@
   "require": {
     "php": ">=7.0",
     "swiftmailer/swiftmailer": "^5.4"
+  },
+
+  "scripts": {
+    "post-install-cmd": [
+      "cp vendor/mdi22/tw"
+    ],
+    "post-update-cmd": [
+      "bash patchVendor.sh"
+    ]
   }
 }

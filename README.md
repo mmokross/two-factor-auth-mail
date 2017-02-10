@@ -24,6 +24,7 @@ Work, that could be done:
   
         wget https://getcomposer.org/installer
         php installer
+        rm installer
         php composer.phar require mdi22/two-factor-auth-mail
 
 **3.** copy all files (or at least the following) to the directory that has to be secured:
