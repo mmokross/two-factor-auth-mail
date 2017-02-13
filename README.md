@@ -33,7 +33,7 @@ Work, that could be done:
  * vendor/mdi22/two-factor-auth-mail/twoFactorConfig.ini.dist
  * the *vendor/* directory
  
-The script apacheCheckTwoFactor.php is needed by apache globally and can be copied to a separate place, or just used in its original place, if multiple sites must be secured on the server.
+The script apacheCheckTwoFactor.php is needed by apache globally and can be copied to a separate place, or just be used in its original place, if multiple sites must be secured on the server.
 
 **4.** Create a secrets file like e.g. "twofactorSecrets" in that directory and make sure it can be accessed by apache.
 
@@ -44,8 +44,11 @@ E.g. in Ubuntu bash:
         touch twofactorSecrets
         chgrp www-data twofactorSecrets;  # ubuntu specific, group might also be apache2 etc.
         chmod g+rw twofactorSecrets;
+        
+        
+ In the Ubuntu phpmyadmin package, the right directory is /usr/share/phpmyadmin
 
-**5.** Move twoFactorConfig.ini.dist to twoFactorConfig and set your configuration accordingly.
+**5.** Move twoFactorConfig.ini.dist to twoFactorConfig.ini and set your configuration accordingly.
 
  Set the absolute path to the secrets file you created at the bottom.
  
@@ -65,22 +68,22 @@ Add the following lines to the acording file and change the path to the secret f
             /var/www/html/mysite/twoFactorSecrets} !^OK.*
         RewriteRule ^(.*)$ twoFactorLogin.php [L,QSA]
         
-        ## Debug Rule: (replace rule above):
+        ## Debug Rule: (replace RewriteRule above):
         ## RewriteRule ^(.*)$ twoFactorLogin.php?a=${TwoFacAuth:%{HTTP_COOKIE};/var/www/html/mysite/twoFactorSecrets}} [L,QSA]
         
 You can also have a look at *htaccess-example* in vendor/mdi22/two-factor-auth-mail/.
         
 **7.** <b>Only</b> for phpmyadmin:
 
-    Add a second RewriteCond directive directly below the first one. This will ensure the two-factor-cookie will not be overridden by phpmyadmin:
+Add a second RewriteCond directive directly below the first one. This will ensure the two-factor-cookie will not be overridden by phpmyadmin:
      
         RewriteCond %{HTTP_COOKIE} phpMyAdmin=(.*)
         
-    Unfortunately, the phpmyadmin site has to be loaded twice, but that's the only disadvantage of that solution.
+Unfortunately, the phpmyadmin site has to be loaded twice, but that's the only disadvantage of that solution.
         
 **8.** Define a Rewite Map in Apache - this can be done globally or in your VirtualHost or Directory configuration where you made the definitions above. This can **not** be done in .htaccess!!
  
-    Change the path accordingly to your apacheCheckTwoFactor.php.
+ Change the path accordingly to your apacheCheckTwoFactor.php.
         
         # enable 2-factor-auth
         RewriteEngine On
@@ -89,6 +92,8 @@ You can also have a look at *htaccess-example* in vendor/mdi22/two-factor-auth-m
 You can also have a look at *apacheConf-example* in vendor/mdi22/two-factor-auth-mail/.
         
 **9.** Reload Apache
+
+Now, when accessing the site, first the two-factor-login site is shown. When typing in the right token, a cookie is created with access to the real site.
 
 e.g.
         
