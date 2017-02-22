@@ -8,7 +8,7 @@ $MAILTOKEN_VALID_SECONDS = $ini_vars["mailtoken_valid_seconds"];
 $COOKIE_SECONDS = 3600 * $LOGIN_VALID_HOURS;
 $LOGIN_SECONDS = 3600 * $LOGIN_VALID_HOURS;
 $ALLOWED_MAIL_ADDRESSES= $ini_vars["allowed_mail_addresses"];
-$SERVER_MAIL_MESSAGE = $ini_vars["server_mail_message"] ?? $_SERVER["SSL_TLS_SNI"];
+$SERVER_MAIL_MESSAGE = $ini_vars["server_title_shown"] ?? $_SERVER["SSL_TLS_SNI"];
 
 $SMTP_HOST=$ini_vars["smtp_host"];
 $SMTP_PORT=$ini_vars["smtp_port"] ?? 25;
